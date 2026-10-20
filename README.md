@@ -1,48 +1,96 @@
-# TranscriptLab — Claude plugin
+# TranscriptLab for Claude
 
-This package connects Claude to the TranscriptLab MCP server at
-`https://api.transcriptlab.dev/mcp`.
+Turn YouTube videos and audio or video files into searchable, exportable transcripts without
+leaving Claude. This plugin connects Claude to the [TranscriptLab](https://transcriptlab.dev) MCP
+server and adds a skill that routes each request to the right tool.
 
-## Layout
+## What you can ask
 
-- `.claude-plugin/plugin.json` — plugin manifest.
-- `.mcp.json` — declares the remote MCP server (streamable HTTP).
-- `skills/transcriptlab/SKILL.md` — routing instructions: which tool answers which request.
-- `assets/icon.png` — plugin icon.
+- "Get the transcript of https://www.youtube.com/watch?v=…"
+- "Which subtitle languages does this video have?"
+- "Find where they talk about pricing in that transcript."
+- "Transcribe this attached recording." (audio or video file)
+- "Transcribe https://example.com/interview.mp3."
+- "Give me that transcript as an SRT file."
+- "Show my earlier transcripts" and "How many credits do I have left?"
 
-## Authentication
+## Features
 
-The server implements the MCP authorization spec end to end: protected-resource metadata at
-`/.well-known/oauth-protected-resource`, authorization-server metadata at
-`/.well-known/oauth-authorization-server`, and RFC 7591 dynamic client registration at
-`/oauth/register`. A conformant client connects with nothing but the URL — no pre-registered
-client id.
+| Feature | What it does |
+| --- | --- |
+| YouTube transcripts | Fetches captions for a video link or ID, in the language you choose |
+| Caption discovery | Lists the caption tracks a video offers before you fetch one |
+| Speech-to-text | Transcribes attached audio or video files and direct media links |
+| Search | Finds phrases inside transcripts you already pulled |
+| Library | Reopens earlier transcripts from your TranscriptLab account |
+| Export | Creates a download link (TXT, SRT, VTT and similar) valid for 10 minutes |
+| Usage | Reports your plan, credits and monthly limits |
 
-On first use the client opens `https://api.transcriptlab.dev/oauth/authorize`, where the user
-either signs in with their TranscriptLab account (Clerk) or pastes an API key. Tokens are minted
-per session as `oauth:<client>` rows in the account's key list, scoped `transcriptlab:read` /
-`transcriptlab:write`, valid one hour with rotating refresh tokens. Sessions that sign in with a
-key — and bare API-key bearer credentials — cannot reach upload/export tools (session-only routes);
-Clerk-signed connections and API-key connections both see the core tools.
+A YouTube video without captions is not transcribed automatically. Claude says so and offers
+speech-to-text if you can attach the file or share a direct media link.
 
-## Local check
+## Install
+
+**Claude Code, as a plugin**
+
+```bash
+git clone https://github.com/hussamsi2040/transcriptlab-claude-plugin
+claude --plugin-dir ./transcriptlab-claude-plugin
+```
+
+**Any MCP client, server only**
 
 ```bash
 claude mcp add --transport http transcriptlab https://api.transcriptlab.dev/mcp
-# then: /mcp in Claude Code, or connect in claude.ai → MCP connectors
 ```
 
-## What the plugin does
+In claude.ai, add `https://api.transcriptlab.dev/mcp` as a custom connector. The server alone has
+the tools; the plugin adds the skill that tells Claude which tool to use.
 
-- Declares one remote MCP server, `https://api.transcriptlab.dev/mcp`. Every request goes to that
-  URL; nothing else is fetched or contacted.
-- Ships one skill (`skills/transcriptlab`) that maps user requests onto the server's
-  model-facing tools. The skill runs no scripts and touches no files.
-- Authenticates via OAuth. On the consent page the user signs in or pastes a TranscriptLab API
-  key; the token stays between Claude and the TranscriptLab gateway.
+## Sign in
 
-## Marketplace submission
+The first request opens a TranscriptLab consent page. Sign in with your TranscriptLab account, or
+paste a TranscriptLab API key. No client ID or manual setup is needed, because the server supports
+OAuth with dynamic client registration.
 
-Submit this repository (plugin path: repository root) as a **Plugin bundle** from the developer
-portal at `claude.ai/directory/manage`. Also submit the MCP server as an **MCP connector** with
-URL `https://api.transcriptlab.dev/mcp`; the two are separate listings that reference each other.
+- Tokens are scoped `transcriptlab:read` and `transcriptlab:write`, last one hour, and refresh
+  automatically.
+- A connection made with an API key cannot create export links or upload files, because those tools
+  need a signed-in session. Everything else works either way.
+- If Claude asks you to reconnect, reconnect the connector once and retry.
+
+## Credits and limits
+
+Transcripts are metered in credits, and a first delivery of a transcript may use one. Searching a
+transcript you already have, checking a job, listing your library and checking usage do not
+deliver new transcripts. When you run out of credits or reach a monthly limit, Claude tells you
+and stops instead of retrying. Plans are on [transcriptlab.dev](https://transcriptlab.dev).
+
+## Privacy and data
+
+- Everything the plugin does goes to `https://api.transcriptlab.dev`. Nothing else is fetched or
+  contacted, and the skill runs no scripts and touches no local files.
+- What is sent: the video links, attached files and media URLs you ask Claude to transcribe, and
+  your API key if you choose to paste one on the consent page.
+- Delivered transcripts are kept in your TranscriptLab library until you delete them.
+- See the [privacy policy](https://transcriptlab.dev/privacy) and
+  [terms](https://transcriptlab.dev/terms).
+
+## Package contents
+
+```
+.claude-plugin/plugin.json      plugin manifest
+.mcp.json                       remote MCP server declaration (streamable HTTP)
+skills/transcriptlab/SKILL.md   routing and behavior instructions
+assets/icon.png                 plugin icon
+LICENSE                         MIT
+```
+
+## Support
+
+- Docs: https://transcriptlab.dev/docs
+- Issues: https://github.com/hussamsi2040/transcriptlab-claude-plugin/issues
+
+## License
+
+MIT, see [LICENSE](LICENSE).
