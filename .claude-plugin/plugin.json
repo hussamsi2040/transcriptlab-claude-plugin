@@ -1,0 +1,12 @@
+{
+  "name": "transcriptlab",
+  "version": "0.1.0",
+  "description": "Turn YouTube videos and audio or video files into searchable, exportable transcripts.",
+  "author": {
+    "name": "TranscriptLab"
+  },
+  "homepage": "https://transcriptlab.dev",
+  "repository": "https://github.com/hussamsi2040/transcriptlab-claude-plugin",
+  "license": "MIT",
+  "keywords": ["youtube", "transcripts", "captions", "speech-to-text", "audio", "subtitles"]
+}
