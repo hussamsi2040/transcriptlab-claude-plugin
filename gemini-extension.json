@@ -1,0 +1,11 @@
+{
+  "name": "transcriptlab",
+  "version": "1.0.0",
+  "description": "YouTube and audio/video transcripts, caption discovery, search and export in Gemini CLI.",
+  "mcpServers": {
+    "transcriptlab": {
+      "httpUrl": "https://api.transcriptlab.dev/mcp"
+    }
+  },
+  "contextFileName": "GEMINI.md"
+}

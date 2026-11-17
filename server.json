@@ -1,0 +1,24 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "dev.transcriptlab/transcriptlab",
+  "title": "TranscriptLab",
+  "description": "Turn YouTube videos and audio or video files into searchable, exportable transcripts.",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/hussamsi2040/transcriptlab-claude-plugin",
+    "source": "github"
+  },
+  "icons": [
+    {
+      "src": "https://transcriptlab.dev/logo-icon.png",
+      "mimeType": "image/png",
+      "sizes": ["512x512"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.transcriptlab.dev/mcp"
+    }
+  ]
+}

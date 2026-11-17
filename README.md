@@ -47,6 +47,24 @@ claude mcp add --transport http transcriptlab https://api.transcriptlab.dev/mcp
 In claude.ai, add `https://api.transcriptlab.dev/mcp` as a custom connector. The server alone has
 the tools; the plugin adds the skill that tells Claude which tool to use.
 
+**Gemini CLI**
+
+```bash
+gemini extensions install https://github.com/hussamsi2040/transcriptlab-claude-plugin
+```
+
+**Cline**
+
+```bash
+cline mcp add transcriptlab https://api.transcriptlab.dev/mcp --transport http --yes
+```
+
+**Cursor, VS Code, and any other MCP client**
+
+Add a remote MCP server with the URL `https://api.transcriptlab.dev/mcp` and the
+Streamable HTTP transport. See [`llms-install.md`](llms-install.md) for the JSON
+config and verification steps.
+
 ## Sign in
 
 The first request opens a TranscriptLab consent page. Sign in with your TranscriptLab account, or
