@@ -34,6 +34,12 @@ speech-to-text if you can attach the file or share a direct media link.
 **Claude Code, as a plugin**
 
 ```bash
+/plugin install transcriptlab --marketplace hussamsi2040/transcriptlab-claude-plugin
+```
+
+Or clone it and load the directory directly:
+
+```bash
 git clone https://github.com/hussamsi2040/transcriptlab-claude-plugin
 claude --plugin-dir ./transcriptlab-claude-plugin
 ```

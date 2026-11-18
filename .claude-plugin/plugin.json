@@ -8,5 +8,13 @@
   "homepage": "https://transcriptlab.dev",
   "repository": "https://github.com/hussamsi2040/transcriptlab-claude-plugin",
   "license": "MIT",
-  "keywords": ["youtube", "transcripts", "captions", "speech-to-text", "audio", "subtitles"]
+  "keywords": [
+    "youtube",
+    "transcripts",
+    "captions",
+    "speech-to-text",
+    "audio",
+    "subtitles"
+  ],
+  "privacyPolicyUrl": "https://transcriptlab.dev/privacy"
 }
